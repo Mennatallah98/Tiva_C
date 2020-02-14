@@ -96,12 +96,37 @@ void GPIO_DIRECTION (int direction)
     REG GPIODIR = B(GPIODIR_O);
     if(direction==INPUT)
     {
-        *GPIODIR = 0x00;
+        *GPIODIR &= ~(1<<1);
+    }
+    else if (direction==OUTPUT)
+    {
+        *GPIODIR |= (1<<1);
     }
 }
 
+//GPIO
+/*
+ Allows the user to either use the pin as GPIO or use its alternate function
+ 0-->GPIO
+ 1-->Alternate function
+ */
+/*function
+ * GPIO
+ * ALTERNATE
+ */
 
-
+void GPIO_FUNCTION (int function)
+{
+    REG GPIOAFSEL = B(GPIOAFSEL_O);
+    if (function==GPIO)
+    {
+        *GPIOAFSEL_F &= ~(1<<1);
+    }
+    else if (function==ALTERNATE)
+    {
+        *GPIOAFSEL_F |= (1<<1);
+    }
+}
 
 
 
