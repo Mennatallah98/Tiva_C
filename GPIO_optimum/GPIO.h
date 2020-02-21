@@ -42,7 +42,7 @@ unsigned char GPIOModeGet(gpio_port port, unsigned char pins);
 
 //PAD functions
 void GPIOPadSet(gpio_port port, unsigned char pins, gpio_drive str, gpio_pad pad);
-unsigned char GPIOPadDriveStrGet(gpio_port port, unsigned char pins);
+unsigned char GPIOPadDriveStrGet(gpio_port port, unsigned char pins); //how
 unsigned char GPIOPadOpenDrainGet(gpio_port port, unsigned char pins);
 unsigned char GPIOPadPullUpGet(gpio_port port, unsigned char pins);
 unsigned char GPIOPadPullDownGet(gpio_port port, unsigned char pins);
