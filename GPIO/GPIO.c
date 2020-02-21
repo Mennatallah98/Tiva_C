@@ -7,7 +7,7 @@
 
 #include "GPIO.h"
 
-//MODE OF OPERATION
+//Bus SELECTION
 /*
  It enables the user to choose whether to work in APB mode which is compatible with older versions or
  AHB mode which gives the tiva c more capabilities
@@ -16,7 +16,7 @@
  * ABP
  * AHB
  */
-void GPIO_MODE_OF_OPERATION (int mode)
+void GPIO_BUS(int mode)
 {
  if(mode==ABP)
    {

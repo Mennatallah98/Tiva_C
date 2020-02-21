@@ -17,16 +17,16 @@ REG RCGCGPIO = 0x400FE608;
 //*****************************************************************
 
 //BASE ADRESSES
-int A_BASE;
-int B_BASE;
-int C_BASE;
-int D_BASE;
-int E_BASE;
-int F_BASE;
-int BASE;
+unsigned long int A_BASE;
+unsigned long int B_BASE;
+unsigned long int C_BASE;
+unsigned long int D_BASE;
+unsigned long int E_BASE;
+unsigned long int F_BASE;
+unsigned long int BASE;
 //******************************************************************
 
-//MODE OF OPERATION
+//BUS
 #define APB   0
 #define AHB   1
 //****************************************************************
