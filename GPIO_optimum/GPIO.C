@@ -10,29 +10,31 @@
 //Bus functions
 void GPIOBusSet(gpio_port port,gpio_bus bus)
 {
-    unsigned long int reg=GPIOHBCTL;
+    ADDRESS reg=GPIOHBCTL;
+    ULI data= *reg;
     if(bus==AHB)
     {
-        SET_BIT(reg, port);
+        SET_BIT(data, port);
     }
     else if (bus==APB)
     {
-        CLR_BIT(reg, port);
+        CLR_BIT(data, port);
     }
 }
 
 gpio_bus GPIOBusGet(gpio_port port)
 {
-    unsigned long int reg=GPIOHBCTL;
-    return GET_BIT(reg, port);
+    ADDRESS reg=GPIOHBCTL;
+    ULI data= *reg;
+    return GET_BIT(data, port);
 }
 //************************************************************
 
 //Function that adds the offset of the desired register with the chosen port
-unsigned long int GPIOSetAddress(gpio_port port, unsigned long int reg)
+ADDRESS GPIOSetAddress(gpio_port port, ULI reg)
 {
     gpio_bus bus= GPIOBusGet(port);
-    unsigned long int desired_port;
+    ADDRESS desired_port;
     if (bus==AHB)
     {
        if (port==PORTA)
@@ -87,7 +89,7 @@ unsigned long int GPIOSetAddress(gpio_port port, unsigned long int reg)
              desired_port=PORTF_APB;
          }
      }
-    unsigned long int final_reg= reg + desired_port;
+    ADDRESS final_reg= reg + desired_port;
     return final_reg;
 }
 //*********************************************************************************
@@ -95,58 +97,154 @@ unsigned long int GPIOSetAddress(gpio_port port, unsigned long int reg)
 //clock functions
 void GPIOClockSet(gpio_port port)
 {
-    unsigned long int reg = GPIOSetAddress(port, RCGCGPIO);
-    SET_BIT(reg, port);
+    ADDRESS reg = GPIOSetAddress(port, RCGCGPIO);
+    ULI data = *reg;
+    SET_BIT(data, port);
 }
 
 void GPIOClockRst(gpio_port port)
 {
-    unsigned long int reg = GPIOSetAddress(port, RCGCGPIO);
-    CLR_BIT(reg, port);
+    ADDRESS reg = GPIOSetAddress(port, RCGCGPIO);
+    ULI data = *reg;
+    CLR_BIT(data, port);
 }
 
 char GPIOClockGet(gpio_port port)
 {
-    unsigned long int reg = GPIOSetAddress(port, RCGCGPIO);
-    return GET_BIT(reg, port);
+    ADDRESS reg = GPIOSetAddress(port, RCGCGPIO);
+    ULI data = *reg;
+    return GET_BIT(data, port);
 }
 //**********************************************************************************
 
 //Mode functions
 void GPIODirModeSet(gpio_port port, unsigned char pins, gpio_mode Mode)
 {
-    unsigned long int reg_AF = GPIOSetAddress(port, GPIOAFSEL);
-    unsigned long int reg_DIR = GPIOSetAddress(port, GPIODIR);
+    ADDRESS reg_AF = GPIOSetAddress(port, GPIOAFSEL);
+    ADDRESS reg_DIR = GPIOSetAddress(port, GPIODIR);
 
-    reg_AF &= ~(pins);
+    ULI data_AF = *reg_AF;
+    ULI data_DIR = *reg_DIR;
+
+    data_AF &= ~(pins);
     if (Mode == MODE_AF)
-        reg_AF |= (0xff & pins);
+        SET_BITS(data_AF,pins);
     else
-        reg_AF |= (0x00 & pins);
+        CLR_BITS(data_AF,pins);
 
-    reg_DIR &= ~(pins);
-    reg_DIR |= (Mode & pins);
+    data_DIR &= ~(pins);
+    data_DIR |= (Mode & pins);
 }
 
 unsigned char GPIODirGet(gpio_port port, unsigned char pins)
 {
-    unsigned long int reg = GPIOSetAddress(port, GPIODIR);
+    ADDRESS reg = GPIOSetAddress(port, GPIOAFSEL);
+    ULI data =*reg;
 
-    reg &= pins;
-    return reg;
+    data &= pins;
+    return data;
 }
 
 unsigned char GPIOModeGet(gpio_port port, unsigned char pins)
 {
-    unsigned long int reg = GPIOSetAddress(port, GPIOAFSEL);
+    ADDRESS reg = GPIOSetAddress(port, GPIODIR);
+    ULI data =*reg;
 
-      reg &= pins;
-      return reg;
+    data &= pins;
+    return data;
 }
 //****************************************************************************************
 
-//Pad functions
+//Pad and drive functions
 void GPIOPadSet(gpio_port port, unsigned char pins, gpio_drive str, gpio_pad pad)
 {
+    //Drive functions
+    ADDRESS reg_2drive = GPIOSetAddress(port, GPIODR2R);
+    ADDRESS reg_4drive = GPIOSetAddress(port, GPIODR4R);
+    ADDRESS reg_8drive = GPIOSetAddress(port, GPIODR8R);
+    ADDRESS reg_slew8drive = GPIOSetAddress(port, GPIOSLR);
 
+    ULI data_2drive = *reg_2drive;
+    ULI data_4drive = *reg_4drive;
+    ULI data_8drive = *reg_8drive;
+    ULI data_slew8drive = *reg_slew8drive;
+
+    if (str==Drive_2mA)
+    {
+        data_2drive &= ~(pins);
+        SET_BITS(data_2drive, pins);
+    }
+    else if (str==Drive_4mA)
+    {
+        data_4drive &= ~(pins);
+        SET_BITS(data_4drive, pins);
+    }
+
+    else if (str==Drive_8mA)
+    {
+        data_8drive &= ~(pins);
+        data_slew8drive &= ~(pins);
+        SET_BITS(data_8drive, pins);
+        CLR_BITS(data_slew8drive, pins);
+    }
+
+    else if (str==Drive_8mA)
+    {
+        data_8drive &= ~(pins);
+        data_slew8drive &= ~(pins);
+        SET_BITS(data_8drive, pins);
+        SET_BITS(data_slew8drive, pins);
+    }
+    //**********************************************************************************
+
+    //PAD functions
+    ADDRESS reg_PU = GPIOSetAddress(port, GPIOPUR) ;
+    ADDRESS reg_PD = GPIOSetAddress(port, GPIOPDR ) ;
+    ADDRESS reg_OD = GPIOSetAddress(port, GPIOODR) ;
+
+    ULI data_PU = *reg_PU;
+    ULI data_PD = *reg_PD;
+    ULI data_OD = *reg_OD;
+
+    if (pad==Pad_PU)
+    {
+        data_PU &= ~(pins);
+        SET_BITS(data_PU, pins);
+    }
+    else if (pad==Pad_PD)
+    {
+        data_PD &= ~(pins);
+        SET_BITS(data_PD, pins);
+    }
+    else if (pad==PAD_NPU_NPD)
+    {
+        data_PD &= ~(pins);
+        data_PU &= ~(pins);
+        CLR_BITS(data_PD, pins);
+        CLR_BITS(data_PU, pins);
+    }
+    else if (pad==PAD_OD)
+    {
+        data_OD &= ~(pins);
+        SET_BITS(data_OD, pins);
+    }
+    //**********************************************************************
+}
+
+//Read and Write functions
+unsigned char GPIORead(gpio_port port, unsigned char pins)
+{
+    ADDRESS reg = GPIOSetAddress(port, GPIODATA);
+    ULI data = *reg;
+    reg = (pins<<2);
+    data &= reg;
+    return data;
+}
+
+void GPIOWrite(gpio_port port, unsigned char pins, unsigned char written_data)
+{
+    ADDRESS reg = GPIOSetAddress(port, GPIODATA);
+    ULI data = *reg;
+    reg = (pins<<2);
+    data = (reg & written_data);
 }
