@@ -260,7 +260,8 @@ unsigned char GPIORead(gpio_port port, unsigned char pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIODATA);
     ULI data = *reg;
-    ULI reg_shifted = ((reg<<2)&pins);
+    ULI reg_address = reg;
+    ULI reg_shifted = ((pins<<2)|reg_address);
     unsigned char data_get = (data&reg_shifted);
 
     return data_get;
@@ -270,7 +271,8 @@ void GPIOWrite(gpio_port port, unsigned char pins, unsigned char written_data)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIODATA);
     ULI data = *reg;
-    ULI reg_shifted = ((reg<<2)&pins);
+    ULI reg_address = reg;
+    ULI reg_shifted = ((pins<<2)|reg_address);
     data = (reg_shifted & written_data);
 }
 //**************************************************************
