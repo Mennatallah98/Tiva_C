@@ -26,7 +26,7 @@ void GPIOBusSet(gpio_port port,gpio_bus bus);
 gpio_bus GPIOBusGet(gpio_port port);
 //*******************************************************
 
-ADDRESS GPIOSetAddress(gpio_port port, unsigned long int reg);
+ADDRESS GPIOSetAddress(gpio_port port, ULI reg);
 
 //Clock functions
 void GPIOClockSet(gpio_port port);
