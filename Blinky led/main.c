@@ -36,7 +36,7 @@ int main(void)
     *RCC &= ~(1<<13);
 
     //PORTF
-    * GPIOHBCTL |= (1<<5);  //port F in AHB
+    *GPIOHBCTL |= (1<<5);  //port F in AHB
 
     //R5
     *RCGCGPIO |= (1<<5); //Enables clock for port F

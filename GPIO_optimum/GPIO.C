@@ -6,11 +6,13 @@
  */
 
 #include "GPIO.h"
+ULI AHB_Ports[5]={PORTA_AHB, PORTB_AHB, PORTC_AHB, PORTD_AHB, PORTE_AHB, PORTF_AHB};
+ULI APB_Ports[5]={PORTA_APB, PORTB_APB, PORTC_APB, PORTD_APB, PORTE_APB, PORTF_APB};
 
 //Bus functions
 void GPIOBusSet(gpio_port port,gpio_bus bus)
 {
-    ADDRESS reg=GPIOHBCTL;
+    ADDRESS reg = GPIOHBCTL;
     ULI data= *reg;
     if(bus==AHB)
     {
@@ -26,7 +28,8 @@ gpio_bus GPIOBusGet(gpio_port port)
 {
     ADDRESS reg=GPIOHBCTL;
     ULI data= *reg;
-    return GET_BIT(data, port);
+    gpio_bus bus = GET_BIT(data, port);
+    return bus;
 }
 //************************************************************
 
@@ -37,57 +40,11 @@ ADDRESS GPIOSetAddress(gpio_port port, ULI reg)
     ADDRESS desired_port;
     if (bus==AHB)
     {
-       if (port==PORTA)
-       {
-           desired_port=PORTA_AHB;
-       }
-       else if (port==PORTB)
-       {
-           desired_port=PORTB_AHB;
-       }
-       else if (port==PORTC)
-       {
-           desired_port=PORTC_AHB;
-       }
-       else if (port==PORTD)
-       {
-           desired_port=PORTD_AHB;
-       }
-        else if (port==PORTE)
-        {
-            desired_port=PORTE_AHB;
-        }
-        else if (port==PORTF)
-        {
-            desired_port=PORTF_AHB;
-        }
+       desired_port = AHB_Ports[port];
     }
     else if (bus==APB)
      {
-        if (port==PORTA)
-        {
-            desired_port=PORTA_APB;
-        }
-        else if (port==PORTB)
-        {
-            desired_port=PORTB_APB;
-        }
-        else if (port==PORTC)
-        {
-            desired_port=PORTC_APB;
-        }
-        else if (port==PORTD)
-        {
-            desired_port=PORTD_APB;
-        }
-         else if (port==PORTE)
-         {
-             desired_port=PORTE_APB;
-         }
-         else if (port==PORTF)
-         {
-             desired_port=PORTF_APB;
-         }
+        desired_port = APB_Ports[port];
      }
     ADDRESS final_reg= reg + desired_port;
     return final_reg;

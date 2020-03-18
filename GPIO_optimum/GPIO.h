@@ -11,14 +11,17 @@
 #include "StdFunctions.h"
 #include "regmap.h"
 
+#define ADDRESS volatile unsigned long int *
+#define ULI     unsigned long int
+
 typedef enum {MODE_IN = 0x00, MODE_OUT = 0xff, MODE_AF = 0x3} gpio_mode;
 typedef enum {PORTA, PORTB, PORTC, PORTD, PORTE, PORTF} gpio_port;
 typedef enum {AHB, APB} gpio_bus;
 typedef enum {Drive_2mA, Drive_4mA, Drive_8mA, Drive_8mA_Selw} gpio_drive;
 typedef enum {Pad_PU,Pad_PD,PAD_NPU_NPD,PAD_OD} gpio_pad;
 
-#define ADDRESS volatile unsigned long int *
-#define ULI     unsigned long int
+
+
 //Functions prototype
 
 //Bus functions

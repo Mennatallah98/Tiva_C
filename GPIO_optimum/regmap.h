@@ -9,7 +9,7 @@
 #define REGMAP_H_
 
 //Control registers
-#define     GPIOHBCTL       0x00007E00
+#define     GPIOHBCTL       0x400FE06C
 #define     RCGCGPIO        0x608
 //*********************************************************
 
@@ -46,5 +46,7 @@
 #define     GPIOSLR         0x518
 #define     GPIODEN         0x51C
 //*****************************************************************
+
+
 
 #endif /* REGMAP_H_ */
