@@ -1,63 +1,43 @@
 /*
  * GPIO.h
  *
- *  Created on: 14 Feb 2020
+ *  Created on: 20 Mar 2020
  *      Author: Mennatallah
  */
 
 #ifndef GPIO_H_
 #define GPIO_H_
 
-#define REG volatile unsigned long int *
+#include "StdFunctions.h"
+#include "regmap.h"
 
-//CLOCK REFISTERS
-REG RCC = 0x400FE060;   //base+offset  //volatile--> no optimization , depends on hardware
-REG GPIOHBCTL = 0x400FE06C;
-REG RCGCGPIO = 0x400FE608;
-//*****************************************************************
+#define ADDRESS volatile unsigned long int *
+#define ULI     unsigned long int
+#define UC      unsigned char
 
-//BASE ADRESSES
-unsigned long int A_BASE;
-unsigned long int B_BASE;
-unsigned long int C_BASE;
-unsigned long int D_BASE;
-unsigned long int E_BASE;
-unsigned long int F_BASE;
-unsigned long int BASE;
-//******************************************************************
+typedef enum {PORTA, PORTB, PORTC, PORTD, PORTE, PORTF} gpio_port;
+typedef enum {APB, AHB} gpio_bus;
+typedef enum {MODE_IN = 0x00, MODE_OUT = 0xff, MODE_AF = 0x3} gpio_mode;
 
-//BUS
-#define APB   0
-#define AHB   1
-//****************************************************************
+//Functions prototype
 
-//PORTs
-#define A 2
-#define B 3
-#define C 4
-#define D 5
-#define E 6
-#define F 7
-//***********************************************************************
+//Bus functions
+void GPIOBusSet(gpio_port port,gpio_bus bus);
+gpio_bus  GPIOBusGet(gpio_port port);
+//*******************************************************
 
-//REGISTERS OFFSET
-#define GPIODIR_O       0x400
-#define GPIOAFSEL_O     0x420
+ULI GPIOSetAddress(gpio_port port, ULI reg);
 
-//*******************************************************************
+//Clock functions
+void GPIOClockSet(gpio_port port);
+void GPIOClockRst(gpio_port port);
+UC GPIOClockGet(gpio_port port);
+//*************************************************************
 
-//REGISTER ADRESSES
-#define B(offset) BASE+offset
-//*****************************************************************
-
-//DIRECTION
-#define INPUT  8
-#define OUTPUT 9
-//*****************************************************************
-
-//FUNCTION
-#define GPIO       10
-#define ALTERNATE  11
-//***********************************************************************
+//Mode functions
+void GPIODirModeSet(gpio_port port, UC pins, gpio_mode Mode);
+UC GPIODirGet(gpio_port port, UC pins);
+UC GPIOModeGet(gpio_port port, UC pins);
+//*************************************************************************
 
 #endif /* GPIO_H_ */

@@ -1,135 +1,103 @@
 /*
  * GPIO.c
  *
- *  Created on: 14 Feb 2020
+ *  Created on: 20 Mar 2020
  *      Author: Mennatallah
  */
 
+#ifndef GPIO_C_
+#define GPIO_C_
+
 #include "GPIO.h"
 
-//Bus SELECTION
-/*
- It enables the user to choose whether to work in APB mode which is compatible with older versions or
- AHB mode which gives the tiva c more capabilities
- */
-/*mode
- * ABP
- * AHB
- */
-void GPIO_BUS(int mode)
-{
- if(mode==ABP)
-   {
-       A_BASE=0x40004000;
-       B_BASE=0x40005000;
-       C_BASE=0x40006000;
-       D_BASE=0x40007000;
-       E_BASE=0x40024000;
-       F_BASE=0x40025000;
-   }
-   else if(mode==AHB)
-   {
-       A_BASE=0x40058000;
-       B_BASE=0x40059000;
-       C_BASE=0x4005A000;
-       D_BASE=0x4005B000;
-       E_BASE=0x4005C000;
-       F_BASE=0x4005D000;
-   }
-}
+//Port addresses arrays
+ADDRESS AHB_Ports[] = {PORTA_AHB, PORTB_AHB, PORTC_AHB, PORTD_AHB, PORTE_AHB, PORTF_AHB};
+ADDRESS APB_Ports[] = {PORTA_APB, PORTB_APB, PORTC_APB, PORTD_APB, PORTE_APB, PORTF_APB};
+//*****************************************************************
 
 
-//PORT
-/*
- provides the user with capability to choose port on which the the change will be done
- */
-/*port
- * A
- * B
- * C
- * D
- * E
- * F
- */
-void GPIO_PORT (int port)
+//Bus functions
+void GPIOBusSet(gpio_port port,gpio_bus bus)
 {
-    if(port==A)
+    ADDRESS reg = GPIOHBCTL;
+    if(bus==AHB)
     {
-        BASE=A_BASE;
+        SET_BIT(reg, port);
     }
-    else if(port==B)
+    else if (bus==APB)
     {
-        BASE=B_BASE;
-    }
-    else if(port==C)
-    {
-        BASE=C_BASE;
-    }
-    else if(port==D)
-    {
-        BASE=D_BASE;
-    }
-    else if(port==E)
-    {
-        BASE=E_BASE;
-    }
-    else if(port==F)
-    {
-        BASE=F_BASE;
+        CLR_BIT(reg, port);
     }
 }
 
-
-//DIRECTION
-/*
- Enables the user to either set the port as input or output
- 0-->INPUT
- 1-->OUTPUT
- */
-/*direction
- * INPUT
- * OUTPUT
- */
-
-void GPIO_DIRECTION (int direction)
+gpio_bus GPIOBusGet(gpio_port port)
 {
-    REG GPIODIR = B(GPIODIR_O);
-    if(direction==INPUT)
-    {
-        *GPIODIR &= ~(1<<1);
-    }
-    else if (direction==OUTPUT)
-    {
-        *GPIODIR |= (1<<1);
-    }
+    ADDRESS reg=GPIOHBCTL;
+    return GET_BIT(reg, port);
+}
+//**********************************************************
+
+
+//clock functions
+void GPIOClockSet(gpio_port port)
+{
+    ADDRESS reg =  RCGCGPIO;
+    SET_BIT(reg, port);
 }
 
-//GPIO
-/*
- Allows the user to either use the pin as GPIO or use its alternate function
- 0-->GPIO
- 1-->Alternate function
- */
-/*function
- * GPIO
- * ALTERNATE
- */
-
-void GPIO_FUNCTION (int function)
+void GPIOClockRst(gpio_port port)
 {
-    REG GPIOAFSEL = B(GPIOAFSEL_O);
-    if (function==GPIO)
-    {
-        *GPIOAFSEL_F &= ~(1<<1);
-    }
-    else if (function==ALTERNATE)
-    {
-        *GPIOAFSEL_F |= (1<<1);
-    }
+    ADDRESS reg =  RCGCGPIO;
+    CLR_BIT(reg, port);
 }
 
+UC GPIOClockGet(gpio_port port)
+{
+    ADDRESS reg =  RCGCGPIO;
+    return GET_BIT(reg, port);
+}
+//***************************************************************
 
+//Function that adds the offset of the desired register with the chosen port
+ULI GPIOSetAddress(gpio_port port, ULI reg )
+{
+    gpio_bus bus= GPIOBusGet(port);
+    ULI desired_port;
+    if (bus==AHB)
+    {
+       desired_port = AHB_Ports[port];
+    }
+    else if (bus==APB)
+     {
+        desired_port = APB_Ports[port];
+     }
+    ULI final_reg = desired_port+reg;
+    return final_reg;
+}
+//*********************************************************************************
 
+//Mode functions
+void GPIODirModeSet(gpio_port port, UC pins, gpio_mode Mode)
+{
+    //AF
+    ADDRESS reg = GPIOSetAddress(port,GPIOAFSEL);
+    *reg &= ~(pins);
+    if (Mode == MODE_AF)
+        SET_BITS(reg,pins);
+    else
+        CLR_BITS(reg,pins);
+    //DIR
+    reg = GPIOSetAddress(port,GPIODIR);
+    ULI data = *reg;
+    data &= ~(pins);
+    data |= (Mode & pins);
+    return data;
+}
+UC GPIODirGet(gpio_port port, UC pins)
+{
+    ADDRESS reg = GPIOSetAddress(port,GPIODIR);
+    ULI data =*reg;
+    return (data&pins);
+}
 
-
-
+#endif /* GPIO_C_ */
