@@ -237,13 +237,13 @@ UC GPIOPadPullDownGet(gpio_port port, UC pins)
 //Read and Write functions
 UC GPIORead(gpio_port port, UC pins)
 {
-    ADDRESS reg = GPIOSetAddress(port, GPIODATA);
-    return *(reg+(pins<<2));
+    ADDRESS reg = GPIOSetAddress(port, (GPIODATA+(pins<<2)));
+    return *reg;
 }
 
 void GPIOWrite(gpio_port port, UC pins, UC written_data)
 {
-    ADDRESS reg = (GPIOSetAddress(port, GPIODATA)+pins<<2);
+    ADDRESS reg = GPIOSetAddress(port, (GPIODATA+(pins<<2)));
     *reg=written_data;
 }
 //*************************************************************
