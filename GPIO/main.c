@@ -40,7 +40,7 @@ int main(void)
     //*******************************
 
     //MODE
-    GPIODirModeSet(PORTF,0x08,MODE_OUT); //red led
+    GPIODirModeSet(PORTF,0x02,MODE_OUT); //red led
     GPIODirModeSet(PORTF,0x10,MODE_IN);  //switch 1
     GPIODirModeSet(PORTF,0x80,MODE_AF);  //just for testing the get function
     UC dir = GPIODirGet(PORTF,0xff);
@@ -48,18 +48,21 @@ int main(void)
     //*******************************************
 
     //PAD and DriverStr
-    GPIOPadSet(PORTF,0x08,Drive_8mA,PAD_NPU_NPD,En_Digital);
+    GPIOPadSet(PORTF,0x02,Drive_8mA,PAD_NPU_NPD,En_Digital);
     GPIOPadSet(PORTF,0x10,Drive_2mA,Pad_PU,En_Digital);
     //********************************************************
 
-    //Read and write functions
-    if(GPIORead(PORTF,0x10)==0)
+    while(1)
     {
-        GPIOWrite(PORTF,0x08,0xff);
-    }
-    else
-    {
-        GPIOWrite(PORTF,0x08,0x00);
+        //Read and write functions
+        if(GPIORead(PORTF,0x10)==0)
+        {
+            GPIOWrite(PORTF,0x02,0xff);
+        }
+        else
+        {
+            GPIOWrite(PORTF,0x02,0x00);
+        }
     }
 
 	return 0;

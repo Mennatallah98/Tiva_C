@@ -238,24 +238,15 @@ UC GPIOPadPullDownGet(gpio_port port, UC pins)
 UC GPIORead(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIODATA);
-    ULI data = *reg;
-    ULI reg_address = reg;
-    ULI reg_shifted = ((pins<<2)|reg_address);
-    UC data_get = (data&reg_shifted);
-
-    return data_get;
+    return *(reg+(pins<<2));
 }
 
 void GPIOWrite(gpio_port port, UC pins, UC written_data)
 {
-    ADDRESS reg = GPIOSetAddress(port, GPIODATA);
-    ULI data = *reg;
-    ULI reg_address = reg;
-    ULI reg_shifted = ((pins<<2)|reg_address);
-    data = (reg_shifted & written_data);
-    *reg=data;
+    ADDRESS reg = (GPIOSetAddress(port, GPIODATA)+pins<<2);
+    *reg=written_data;
 }
-//**************************************************************
+//*************************************************************
 
 
 #endif /* GPIO_C_ */
