@@ -23,7 +23,26 @@ int main(void)
     //PWDRN
     *RCC &= ~(1<<13);
 
-    INTSetEnable(5);
+    INTEnable(30);
+    INTEnable(0);  //to test disable
+    INTDisable(0);
+    INT_status Int_30 = INTGetStatus(30);
+    INT_status Int_0 = INTGetStatus(0);
+
+    INTSetPending(0);
+    INTSetPending(1);
+    INTClearPending(1);
+    INT_pending P_0 = INTGetPending(0);
+    INT_pending P_1 = INTGetPending(1);
+
+    Int_Activation A_0 = INTGetActivation(0);
+    Int_Activation A_1 = INTGetActivation(1);
+    Int_Activation A_30 = INTGetActivation(30);
+
+    INTSoftwareTrigger(1);
+
+    INTSetPriority(0,2);
+    INTSetPriority(30,1);
 
 	return 0;
 }
