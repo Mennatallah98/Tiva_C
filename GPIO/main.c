@@ -54,8 +54,6 @@ int main(void)
     GPIOPadSet(PORTF,0x10,Drive_2mA,Pad_PU,En_Digital);
     //********************************************************
 
-    //GPIOWrite(PORTF,0x02,0xff);
-    //int switch_1 = GPIORead(PORTF,0x10);
     while(1)
     {
         //Read and write functions

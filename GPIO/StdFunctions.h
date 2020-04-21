@@ -15,5 +15,6 @@
 
 #define SET_BITS(reg, pins) (*reg |= (0xff & pins))
 #define CLR_BITS(reg, pins) (*reg |= (0x00 & pins))
+#define GET_BITS(reg, pins) (*reg & pins)
 
 #endif /* STDFUNCTIONS_H_ */

@@ -96,15 +96,13 @@ void GPIODirModeSet(gpio_port port, UC pins, gpio_mode Mode)
 UC GPIODirGet(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port,GPIODIR);
-    ULI data =*reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 
 UC GPIOModeGet(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port,GPIOAFSEL);
-    ULI data =*reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 //*********************************************************************************************
 
@@ -191,46 +189,39 @@ void GPIOPadSet(gpio_port port, UC pins, gpio_drive str, gpio_pad pad, gpio_enab
 UC GPIOPadDriveStr2Get(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIODR2R);
-    ULI data = *reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 UC GPIOPadDriveStr4Get(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIODR4R);
-    ULI data = *reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 UC GPIOPadDriveStr8Get(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIODR8R);
-    ULI data = *reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 UC GPIOPadDriveStrSlewGet(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIOSLR);
-    ULI data = *reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 UC GPIOPadOpenDrainGet(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIOODR);
-    ULI data = *reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 
 UC GPIOPadPullUpGet(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIOPUR);
-    ULI data = *reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 
 UC GPIOPadPullDownGet(gpio_port port, UC pins)
 {
     ADDRESS reg = GPIOSetAddress(port, GPIOPDR);
-    ULI data = *reg;
-    return (data&pins);
+    return GET_BITS(reg,pins);
 }
 //****************************************************************************************
 
@@ -247,6 +238,7 @@ void GPIOWrite(gpio_port port, UC pins, UC written_data)
     *reg=written_data;
 }
 //*************************************************************
+
 
 
 #endif /* GPIO_C_ */
