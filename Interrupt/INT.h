@@ -22,10 +22,6 @@ typedef enum{Disabled,Enabled}INT_status;
 typedef enum{Not_pending,Pending}INT_pending;
 typedef enum{Inactive, Active}Int_activation;
 
-#define ADDRESS volatile unsigned long int *
-#define ULI     unsigned long int
-#define UC      unsigned char
-
 ULI INTSetAddress(ULI offset, int reg_diff);
 
 void INTEnable(INT_no INT);

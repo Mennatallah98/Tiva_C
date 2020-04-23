@@ -18,4 +18,8 @@
 #define CLR_BITS(reg, pins) (*reg |= (0x00 & pins))
 #define GET_BITS(reg, pins) (*reg & pins)
 
+#define ADDRESS volatile unsigned long int *
+#define ULI     unsigned long int
+#define UC      unsigned char
+
 #endif /* STDFUNCTIONS_H_ */
