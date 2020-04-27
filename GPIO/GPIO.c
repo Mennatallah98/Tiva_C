@@ -85,13 +85,15 @@ void GPIODirModeSet(gpio_port port, UC pins, gpio_mode Mode)
     if (Mode == MODE_AF)
         SET_BITS(reg,pins);
     else
+    {
         CLR_BITS(reg,pins);
-    //DIR
-    reg = GPIOSetAddress(port,GPIODIR);
-    ULI data = *reg;
-    data &= ~(pins);
-    data |= (Mode & pins);
-    *reg=data;
+        //DIR
+        reg = GPIOSetAddress(port,GPIODIR);
+        ULI data = *reg;
+        data &= ~(pins);
+        data |= (Mode & pins);
+        *reg=data;
+    }
 }
 UC GPIODirGet(gpio_port port, UC pins)
 {

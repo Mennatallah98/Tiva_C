@@ -9,8 +9,6 @@
 #define REGMAP_H_
 
 
-#define RegAddress(base,offset) base+offset
-
 //Control registers
 #define     GPIOHBCTL       0x400FE06C
 #define     RCGCGPIO        0x400FE608
@@ -49,5 +47,6 @@
 #define     GPIODEN         0x51C
 #define     GPIOAMSEL       0x528
 #define     GPIODATA        0x000
+//******************************************************************************
 
 #endif /* REGMAP_H_ */
