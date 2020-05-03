@@ -81,7 +81,7 @@ void TimerSetConfig(Timer_id id,Timer_config config)
     *reg |= config;
 }
 
-Timer_config TimerGetAddress(Timer_id id)
+Timer_config TimerGetConfig(Timer_id id)
 {
     ADDRESS reg = UARTSetAddress(id,GPTMCFG);
     return *reg;

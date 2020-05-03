@@ -39,7 +39,7 @@ ULI TimerSetAddress(Timer_id id, ULI reg);
 
 //Timer config
 void TimerSetConfig(Timer_id id,Timer_config config);
-Timer_config TimerGetAddress(Timer_id id);
+Timer_config TimerGetConfig(Timer_id id);
 //**********************************************************
 
 //RTC
