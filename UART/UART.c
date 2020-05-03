@@ -286,7 +286,7 @@ UART_set UARTGetLoopBack(UART_id id)
 }
 //***************************************************
 
-//UART Baudrate clk source
+//Baudrate
 void UARTSetClkBaudrate(UART_id id, UART_clk_src clk, UART_clk_div div)
 {
     ADDRESS reg = UARTSetAddress(id, UARTCC);
@@ -309,6 +309,17 @@ UART_clk_div UARTGetClkDiv(UART_id id)
 {
     ADDRESS reg = UARTSetAddress(id, UARTCTL);
     return GET_BIT(reg,5);
+}
+void UARTSetBaudrate(UART_id id, UART_baudrates baudrate)
+{
+    int clkdiv,clksrc;
+    if(UARTGetClkDiv(id))
+        clkdiv=8;
+    else
+        clkdiv=16;
+    if(UARTGetClkSrc(id))
+        clksrc=16000000;
+
 }
 //**************************************************************
 

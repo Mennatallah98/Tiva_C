@@ -25,18 +25,20 @@ typedef enum {NotEpmty, Empty}UART_Memory_emptiness;
 typedef enum {NotFull, Full}UART_Memory_fullness;
 typedef enum {Available, Busy}UART_state;
 typedef enum {UART_No_Error,UART_ERROR}UART_error;
+typedef enum {UART_110=110, UART_300=300, UART_600=600, UART_1200=1200, UART_2400=2400, UART_4800=4800, UART_9600=9600,  UART_14400=14400,
+    UART_19200=19200, UART_38400=38400, UART_57600=57600, UART_115200=115200, UART_128000=128000, UART_256000=256000}UART_baudrates;
 
 //UART Clk
 void UARTClkEnable(UART_id id);
 void UARTClkDisable(UART_id id);
-UART_set UARTCLKGet(UART_id id);
+UART_set UARTClkGet(UART_id id);
 //*************************************************
 
 //UART GPIO functions
 void UARTConfigGPIO(UART_id id, gpio_bus bus, gpio_drive str);
 //*************************************************************
 
-ULI UARTSetAddress(UART_id id, ULI reg );
+ULI UARTSetAddress(UART_id id, ULI reg);
 
 //UART Enable
 void UARTEnable(UART_id id);
@@ -91,10 +93,11 @@ void UARTSetLoopBack(UART_id id,UART_set LBE);
 UART_set UARTGetLoopBack(UART_id id);
 //**********************************************
 
-//UART Baudrate clk
+//Baudrate
 void UARTSetClkBaudrate(UART_id id, UART_clk_src clk, UART_clk_div div);
 UART_clk_src UARTGetClkSrc(UART_id id);
 UART_clk_div UARTGetClkDiv(UART_id id);
+void UARTSetBaudrate(UART_id id, UART_baudrates baudrate);
 //*******************************************
 
 //UART INT

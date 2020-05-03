@@ -79,5 +79,8 @@
 #define     UARTLCRH        0x02C
 #define     UARTDR          0x000
 #define     UARTFR          0x018
+#define     UARTIBRD        0x024
+#define     UARTFBRD        0x028
+
 
 #endif /* REGMAP_H_ */
