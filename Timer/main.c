@@ -12,7 +12,7 @@ int main(void)
 
 
     TimerSetConfig(TIMER1,Seprated);
-    Timer_config config = TimerGetAddress(TIMER1);
+    Timer_config config = TimerGetConfig(TIMER1);
 
     TimerConfigGPIO(TIMER1, AHB, Drive_8mA);
 
